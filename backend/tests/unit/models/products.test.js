@@ -10,8 +10,8 @@ describe('Testes para as funções de models', function () {
     let camelizeStub;
 
     before(function () {
-        connectionStub = sinon.stub(connection, 'execute');
-        camelizeStub = sinon.stub(camelize);
+        connectionStub = sinon.stub(connection, 'execute').resolves([]);
+        camelizeStub = sinon.stub(camelize).returns({});
     });
 
     after(function () {
@@ -21,7 +21,7 @@ describe('Testes para as funções de models', function () {
 
     it('deve retornar todos os produtos', async function () {
         const mockResult = [{ id: 1, name: 'Produto 1' }, { id: 2, name: 'Produto 2' }];
-        connectionStub.returns([mockResult]);
+        connectionStub.resolves([mockResult]);
         camelizeStub.returns(mockResult);
 
         const result = await findAll();
@@ -33,7 +33,7 @@ describe('Testes para as funções de models', function () {
 
     it('deve retornar o produto com o id fornecido', async function () {
         const mockResult = { id: 1, name: 'Produto 1' };
-        connectionStub.returns([[mockResult]]);
+        connectionStub.resolves([[mockResult]]);
         camelizeStub.returns(mockResult);
 
         const result = await findById(1);
