@@ -1,12 +1,13 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
 const camelize = require('camelize');
-const connection = require('../models/connection');
+const connection = require('../../../src/models/connection');
 
-const { findAll, findById } = require('../models');
+const { findAll, findById } = require('../../../src/models');
 
-describe('Teste para a função findAll', function () {
-    let connectionStub, camelizeStub;
+describe('Testes para as funções de models', function () {
+    let connectionStub;
+    let camelizeStub;
 
     before(function () {
         connectionStub = sinon.stub(connection, 'execute');
@@ -28,20 +29,6 @@ describe('Teste para a função findAll', function () {
         expect(result).to.deep.equal(mockResult);
         expect(connectionStub.calledOnce).to.be.true;
         expect(camelizeStub.calledOnce).to.be.true;
-    });
-});
-
-describe('Teste para a função findById', function () {
-    let connectionStub, camelizeStub;
-
-    before(function () {
-        connectionStub = sinon.stub(connection, 'execute');
-        camelizeStub = sinon.stub(camelize);
-    });
-
-    after(function () {
-        connectionStub.restore();
-        camelizeStub.restore();
     });
 
     it('deve retornar o produto com o id fornecido', async function () {
