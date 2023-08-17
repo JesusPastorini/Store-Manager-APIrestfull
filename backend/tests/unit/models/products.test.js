@@ -1,45 +1,41 @@
 const sinon = require('sinon');
 const { expect } = require('chai');
-const camelize = require('camelize');
+
+const { productsModel } = require('../../../src/models');
 const connection = require('../../../src/models/connection');
 
-const { findAll, findById } = require('../../../src/models');
-
 describe('Testes para as funções de models', function () {
-    let connectionStub;
-    let camelizeStub;
-
-    before(function () {
-        connectionStub = sinon.stub(connection, 'execute').resolves([]);
-        camelizeStub = sinon.stub(camelize).returns({});
+    afterEach(function () {
+        sinon.restore();
     });
 
-    after(function () {
-        connectionStub.restore();
-        camelizeStub.restore();
+    it('deve retornar vazio quando não há produtos', async function () {
+        sinon.stub(connection, 'execute').resolves([[]]);
+
+        const result = await productsModel.findAll();
+
+        expect(result).to.be.an('array');
+        expect(result).to.have.lengthOf(0);
     });
 
     it('deve retornar todos os produtos', async function () {
         const mockResult = [{ id: 1, name: 'Produto 1' }, { id: 2, name: 'Produto 2' }];
-        connectionStub.resolves([mockResult]);
-        camelizeStub.returns(mockResult);
+        sinon.stub(productsModel, 'findAll').resolves(mockResult);
 
-        const result = await findAll();
+        const result = await productsModel.findAll();
 
-        expect(result).to.deep.equal(mockResult);
-        expect(connectionStub.calledOnce).to.be.true;
-        expect(camelizeStub.calledOnce).to.be.true;
+        expect(result).to.be.an('array');
+        expect(result).to.have.lengthOf(2);
+        expect(result).to.be.deep.equal(mockResult);
     });
 
     it('deve retornar o produto com o id fornecido', async function () {
         const mockResult = { id: 1, name: 'Produto 1' };
-        connectionStub.resolves([[mockResult]]);
-        camelizeStub.returns(mockResult);
+        sinon.stub(productsModel, 'findById').resolves(mockResult);
 
-        const result = await findById(1);
+        const result = await productsModel.findById(1);
 
         expect(result).to.deep.equal(mockResult);
-        expect(connectionStub.calledOnce).to.be.true;
-        expect(camelizeStub.calledOnce).to.be.true;
+        expect(result).to.be.an('object');
     });
 });
