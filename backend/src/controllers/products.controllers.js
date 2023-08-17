@@ -10,9 +10,17 @@ const openProductsId = async (req, res) => {
     const data = await productsService.getIdProducts(id);
     if (data.status !== 'SUCCESSFUL') return res.status(404).json(data.data);
     return res.status(200).json(data.data);
-};  
+};
+
+const addProducts = async (req, res) => {
+  const { name } = req.body;
+  const data = await productsService.serviceAddProducts(name);
+  if (data.status !== 'SUCCESSFUL') return res.status(404).json(data.data);
+  return res.status(201).json(data.data);
+};
   
   module.exports = {
     openProducts,
     openProductsId,
+    addProducts,
   };
