@@ -15,7 +15,9 @@ const openProductsId = async (req, res) => {
 const addProducts = async (req, res) => {
   const { name } = req.body;
   const data = await productsService.serviceAddProducts(name);
-  if (data.status !== 'SUCCESSFUL') return res.status(404).json(data.data);
+
+  if (data.status === 'BAD REQUEST') return res.status(400).json(data.data);
+    if (data.status === 'UNPROCESSABLE ENTITY') return res.status(422).json(data.data);
   return res.status(201).json(data.data);
 };
   

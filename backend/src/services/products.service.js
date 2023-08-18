@@ -11,9 +11,17 @@ const getIdProducts = async (Id) => {
     return { status: 'SUCCESSFUL', data: result };
 };
 
-const serviceAddProducts = async (product) => {
-  const result = await productsModel.create(product);
-  console.log(result); 
+const serviceAddProducts = async (name) => {
+  if (!name) return { status: 'BAD REQUEST', data: { message: '"name" is required' } };
+
+  if (name.length < 5) {
+    return {
+      status: 'UNPROCESSABLE ENTITY',
+      data: { message: '"name" length must be at least 5 characters long' },
+    };
+  }
+
+  const result = await productsModel.create(name); 
   if (!result) return { status: 'NOT FOUND', data: { message: 'Product not found' } };
   return { status: 'SUCCESSFUL', data: result };
 };
