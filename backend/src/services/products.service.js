@@ -26,8 +26,29 @@ const serviceAddProducts = async (name) => {
   return { status: 'SUCCESSFUL', data: result };
 };
 
+const getProductById = async (productId) => productsModel.findById(productId);
+
+const updateProduct = async (productId, name) => {
+  if (!name) return { status: 'BAD REQUEST', data: { message: '"name" is required' } };
+
+  if (name.length < 5) {
+    return {
+      status: 'UNPROCESSABLE ENTITY',
+      data: { message: '"name" length must be at least 5 characters long' },
+    };
+  }
+
+  const updatedProduct = await productsModel.updateProduct(productId, name);
+  if (!updatedProduct) {
+      return { status: 'NOT FOUND', data: { message: 'Product not found' } };
+  }
+  return { status: 'SUCCESSFUL', data: updatedProduct };
+};
+
   module.exports = {
     getAllProducts,
     getIdProducts,
     serviceAddProducts,
+    getProductById,
+    updateProduct,
   };
