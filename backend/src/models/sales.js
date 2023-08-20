@@ -36,7 +36,23 @@ const findById = async (Id) => {
   return camelize(resId);
 };
 
+const createSale = async () => {
+    const [result] = await connection.execute('INSERT INTO sales (date) VALUES (NOW())');
+    return { id: result.insertId };
+};
+
+const createSaleProduct = async (saleId, productId, quantity) => {
+    await connection.execute(
+        'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
+        [saleId, productId, quantity],
+    );
+
+    return { productId, quantity };
+};
+
 module.exports = {
   findAll,  
   findById,
+  createSale,
+  createSaleProduct,
 };

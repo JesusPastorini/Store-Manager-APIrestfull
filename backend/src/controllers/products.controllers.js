@@ -18,6 +18,7 @@ const addProducts = async (req, res) => {
 
   if (data.status === 'BAD REQUEST') return res.status(400).json(data.data);
     if (data.status === 'UNPROCESSABLE ENTITY') return res.status(422).json(data.data);
+    
   return res.status(201).json(data.data);
 };
   
