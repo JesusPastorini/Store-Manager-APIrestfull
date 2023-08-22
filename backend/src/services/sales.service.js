@@ -67,6 +67,8 @@ const addSalesService = async (itemsSold) => {
 
   module.exports = {
     getAllSales,
-    getIdSales,
-    addSalesService,
+  getIdSales,
+  validateSalesItems,
+  checkProductsExistence,
+  addSalesService,
   };
